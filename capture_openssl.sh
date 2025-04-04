@@ -31,8 +31,13 @@ SOCAT_PID=$!
 sleep 1
 
 # 使用openssl s_client通過本地端口轉發器發送HEAD請求到google.com，使用 TLS 1.3
-echo "使用openssl發送HEAD請求，使用TLS 1.3..."
-cat request.txt | openssl s_client -connect localhost:4433 -tls1_3 -ign_eof -quiet
+echo "使用openssl發送HEAD請求，使用TLS 1.3並限制 extension..."
+cat request.txt | openssl s_client -connect localhost:4433 \
+  -tls1_3 \
+  -sigalgs "rsa_pkcs1_sha256:rsa_pss_rsae_sha256:ecdsa_secp256r1_sha256" \
+  -curves secp256r1 \
+  -ign_eof \
+  -quiet
 
 # 等待確保捕獲完成
 sleep 2
