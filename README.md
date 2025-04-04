@@ -25,3 +25,14 @@ Client 兩種做法. 寫 code 產生. 拿現成的挖洞.
 
 先選挖洞的.
 
+叫 Github Copilot - Agent - Claude 3.7 Sonnet 來幫忙.
+
+```prompt
+幫我寫一個 script.
+開一個 local port forwarder 在 port 4433.
+用 openssl s_client 透過它去連接 google.com port 443. 送 HEAD request 就好. HTTP/1.1 . 用 TLS 1.3 .
+用 tcpdump 把內容 capture 下來. (不用 sudo)
+開 wireshark 讓我檢視內容.
+```
+
+![wireshark](image.png)
