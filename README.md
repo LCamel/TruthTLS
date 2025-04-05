@@ -70,6 +70,23 @@ supported_groups: secp256r1
 a8 8d c6 18 97 c3 a6 fe d9 f6 55 e5 e8 f2 64 27
 這樣的 input string
 傳回 byte[]
+```
 
-幫我開一個 Java class "Client"
+
+```prompt
+幫我新增一個 hexdump 的 util method
+給一個 title 和一個 byte[]
+印到 stdout
+```
+
+```
+幫我新增一個 class Client
+新增一個不需要參數的 connect() method 在裡面.
+把這個 request 送到 google.com port 443
+16030100c3010000bf0303678167367ea88dc61897c3a6fed9f655e5e8f264277e128df7635d4f52d8fa8320bf1212ea9b2d536dd6593d39c20a390bf4e2e16bae3ee9e039db6734c1e2c8fb0002130101000074000b000403000102000a000400020017000d00080006040108040403002b0003020304002d000201010033004700450017004104e32e315594197a08d8feea3eaf2792d5101d87a304f12a87aa4a52db3b827657716c359677f100ce616ef996a262da9af563d4b65f91bb122617fdd387ba6046
+用基本的 Socket / OutputStream / InputStream / byte[]
+讀取所有的 response 到一個 byte[]
+然後 hexdump 出來
+在最外層捕捉 Exception 轉成 RuntimeException 再 throw
+過程中使用 class Utils
 ```
