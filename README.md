@@ -379,3 +379,9 @@ throw runtime exception
 不加參數就是現在的行為
 加上 "local" argument 的話就啟動 openssl server 在 port 4433, 不需要 socat
 ```
+
+```
+在 class Keys 上面加上一個  private ByteArrayOutputStream transcript
+加上一個 public function addTranscript(byte[]) 去 append
+再加上一個 public function getTranscript(byte[]) 去拿目前的 stream 中的 append 在一起的 byte[]
+```

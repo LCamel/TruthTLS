@@ -1,5 +1,6 @@
 package org.truthtls;
 
+import java.io.ByteArrayOutputStream;
 import java.security.*;
 import java.security.interfaces.ECPublicKey;
 import java.security.spec.*;
@@ -15,6 +16,9 @@ public class Keys {
     
     // Store the shared secret after performing ECDH key agreement
     public byte[] sharedSecret;
+    
+    // Store transcript data
+    private ByteArrayOutputStream transcript = new ByteArrayOutputStream();
     
     /**
      * Constructor - generates a new secp256r1 key pair upon instantiation
@@ -34,6 +38,26 @@ public class Keys {
         } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
             throw new RuntimeException("Failed to generate key pair: " + e.getMessage(), e);
         }
+    }
+    
+    /**
+     * Adds data to the transcript
+     * @param data The byte array to append to the transcript
+     */
+    public void addTranscript(byte[] data) {
+        try {
+            transcript.write(data);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to add data to transcript: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Gets the current full transcript as a byte array
+     * @return The complete transcript as a byte array
+     */
+    public byte[] getTranscript() {
+        return transcript.toByteArray();
     }
     
     /**
