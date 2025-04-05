@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Client {
 
@@ -14,6 +16,9 @@ public class Client {
     
     // 将 Keys 移到 Client 的实例字段
     private Keys keys;
+    
+    // 用于存储 TLS handshake 的 transcript
+    private List<byte[]> transcript = new ArrayList<>();
 
     /**
      * Connects to google.com on port 443, sends a predefined TLS request,
@@ -41,6 +46,13 @@ public class Client {
             // The uncompressed key format is exactly 65 bytes (1 byte prefix + 32 bytes X + 32 bytes Y)
             int pubKeyOffset = requestData.length - 65;
             System.arraycopy(uncompressedPublicKey, 0, requestData, pubKeyOffset, 65);
+            
+            // 跳过前5个字节（TLS record header）并将剩余内容保存到 transcript 中
+            // TLS record header: 1 byte (content type) + 2 bytes (protocol version) + 2 bytes (length)
+            byte[] clientHelloTranscript = new byte[requestData.length - 5];
+            System.arraycopy(requestData, 5, clientHelloTranscript, 0, clientHelloTranscript.length);
+            transcript.add(clientHelloTranscript);
+            System.out.println("Saved Client Hello to transcript (length: " + clientHelloTranscript.length + " bytes)");
             
             // Display the modified request with randomized sections and new public key
             Utils.hexdump("Modified TLS request", requestData);
@@ -89,6 +101,10 @@ public class Client {
                         System.out.println("Handshake record detected, creating Handshake object:");
                         Handshake handshake = Handshake.read(record.data);
                         handshake.dump();
+                        
+                        // 將整個 handshake 記錄到 transcript 中
+                        transcript.add(record.data);
+                        System.out.println("Saved server handshake to transcript (length: " + record.data.length + " bytes)");
                         
                         // 检查是否为 ServerHello 消息
                         if (handshake.msg_type == Handshake.SERVER_HELLO && handshake.object instanceof ServerHello) {
