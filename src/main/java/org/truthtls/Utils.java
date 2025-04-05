@@ -3,8 +3,6 @@ package org.truthtls;
 import java.security.SecureRandom;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class Utils {
     // 使用 SecureRandom 來生成隨機字節

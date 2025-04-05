@@ -23,6 +23,12 @@ public class Keys {
     // Pre-Shared Key, initialized to all zeros
     private byte[] PSK = new byte[32]; // 32 bytes = SHA-256 hash length
     
+    // TLS 1.3 Traffic Secrets
+    private byte[] earlySecret;
+    private byte[] handshakeSecret;
+    private byte[] clientHandshakeTrafficSecret;
+    private byte[] serverHandshakeTrafficSecret;
+    
     /**
      * Constructor - generates a new secp256r1 key pair upon instantiation
      * @throws RuntimeException if key generation fails
@@ -149,6 +155,68 @@ public class Keys {
         } catch (Exception e) {
             throw new RuntimeException("Failed to compute shared secret: " + e.getMessage(), e);
         }
+    }
+    
+    /**
+     * Calculates the handshake secrets according to TLS 1.3 Key Schedule
+     * This should be called after the shared secret is computed via ECDH
+     * 
+     * @return The client_handshake_traffic_secret
+     */
+    public byte[] calculateHandshakeSecrets() {
+        if (sharedSecret == null) {
+            throw new IllegalStateException("Shared secret must be computed first");
+        }
+        
+        try {
+            // 1. Calculate early_secret = HKDF-Extract(salt=0, key=PSK)
+            byte[] zeroSalt = new byte[32]; // 32 zeros for SHA-256
+            earlySecret = HKDF.extract(zeroSalt, PSK);
+            Utils.hexdump("early_secret", earlySecret);
+            
+            // 2. For Derive-Secret, we need an empty string, not its hash
+            byte[] emptyString = new byte[0];
+            
+            // 3. Calculate derived_secret = HKDF.deriveSecret(earlySecret, "derived", emptyString)
+            byte[] derivedSecret = HKDF.deriveSecret(earlySecret, "derived", emptyString);
+            Utils.hexdump("derived_secret", derivedSecret);
+            
+            // 4. Calculate handshake_secret = HKDF-Extract(derived_secret, shared_secret)
+            handshakeSecret = HKDF.extract(derivedSecret, sharedSecret);
+            Utils.hexdump("handshake_secret", handshakeSecret);
+            
+            // 5. Calculate client/server_handshake_traffic_secret
+            byte[] transcriptBytes = getTranscript();
+            clientHandshakeTrafficSecret = 
+                HKDF.deriveSecret(handshakeSecret, "c hs traffic", transcriptBytes);
+            Utils.hexdump("client_handshake_traffic_secret", clientHandshakeTrafficSecret);
+            
+            serverHandshakeTrafficSecret = 
+                HKDF.deriveSecret(handshakeSecret, "s hs traffic", transcriptBytes);
+            Utils.hexdump("server_handshake_traffic_secret", serverHandshakeTrafficSecret);
+            
+            return clientHandshakeTrafficSecret;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to calculate handshake secrets", e);
+        }
+    }
+    
+    /**
+     * Gets the client_handshake_traffic_secret
+     * 
+     * @return The client handshake traffic secret or null if not yet calculated
+     */
+    public byte[] getClientHandshakeTrafficSecret() {
+        return clientHandshakeTrafficSecret;
+    }
+    
+    /**
+     * Gets the server_handshake_traffic_secret
+     * 
+     * @return The server handshake traffic secret or null if not yet calculated
+     */
+    public byte[] getServerHandshakeTrafficSecret() {
+        return serverHandshakeTrafficSecret;
     }
     
     /**

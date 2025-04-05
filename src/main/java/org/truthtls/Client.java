@@ -120,6 +120,18 @@ public class Client {
                                     // 计算共享密钥
                                     keys.computeSharedSecret(keyShareEntry.key_exchange);
                                     
+                                    // 根据 TLS 1.3 Key Schedule 计算 handshake traffic secrets
+                                    System.out.println("Computing handshake traffic secrets...");
+                                    
+                                    // Synchronize transcript with the Keys object
+                                    for (byte[] transcriptChunk : transcript) {
+                                        keys.addTranscript(transcriptChunk);
+                                    }
+                                    
+                                    // Calculate handshake secrets according to TLS 1.3 Key Schedule
+                                    byte[] clientHandshakeTrafficSecret = keys.calculateHandshakeSecrets();
+                                    System.out.println("Handshake secrets computed!");
+                                    
                                     break; // 找到 key_share 后跳出循环
                                 }
                             }
