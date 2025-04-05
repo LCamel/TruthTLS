@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class for parsing TLS 1.3 ServerHello messages
@@ -12,6 +14,7 @@ public class ServerHello {
     // Public fields as requested
     public int cipher_suite;
     public byte[] extension_data;
+    public List<Extension> extensions;
     
     // Additional fields for completeness
     private byte[] random;
@@ -60,6 +63,15 @@ public class ServerHello {
             serverHello.extension_data = new byte[extensionsLength];
             in.readFully(serverHello.extension_data);
             
+            // Parse extensions
+            serverHello.extensions = new ArrayList<>();
+            ByteArrayInputStream bis = new ByteArrayInputStream(serverHello.extension_data);
+            DataInputStream dis = new DataInputStream(bis);
+            while (dis.available() > 0) {
+                Extension extension = Extension.read(dis);
+                serverHello.extensions.add(extension);
+            }
+            
             return serverHello;
         } catch (IOException e) {
             throw new RuntimeException("I/O error while reading ServerHello message", e);
@@ -94,5 +106,9 @@ public class ServerHello {
         Utils.hexdump("    ", legacy_session_id_echo);
         System.out.println("  Extensions [" + extension_data.length + "]:");
         Utils.hexdump("    ", extension_data);
+        System.out.println("  Parsed Extensions:");
+        for (Extension extension : extensions) {
+            extension.dump();
+        }
     }
 }

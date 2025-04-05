@@ -257,3 +257,27 @@ message_hash(254),
 Object object = null;
 如果 msg_type 是 handshake, 就用 data 把 Handshake object 建出來
 ```
+
+```
+幫我寫一個 class Extension
+從 java.io.DataInput 讀出資料
+
+資料的 layout 如下. integer 都是 unsigned, big-endian.
+struct {
+  ExtensionType extension_type;   // 1 byte int
+  opaque extension_data<0..2^16-1>; // 2 byte length followed by byte[length]
+} Extension;
+
+
+class Extension 有下面這幾個 public field, 不用 getter setter
+int type // from extension_type
+byte[] data // from extension_data
+```
+
+```
+在 ServerHello 中, 把 extension_data 用 loop 讀出一個一個的 Extension object, 存到 List<Extension> extensions
+```
+
+```
+讓 git ignore "captures"  目錄
+```
