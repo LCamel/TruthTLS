@@ -36,3 +36,10 @@ Client 兩種做法. 寫 code 產生. 拿現成的挖洞.
 ```
 
 ![wireshark](image.png)
+
+
+但是顯然內容太多了. 只要最少的內容
+cipher_suite: TLS_AES_128_GCM_SHA256
+supported_versions: TLS 1.3
+signature_algorithms: rsa_pkcs1_sha256 / rsa_pss_rsae_sha256 / ecdsa_secp256r1_sha256
+supported_groups: secp256r1
