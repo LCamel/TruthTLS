@@ -373,3 +373,9 @@ throw runtime exception
 ```
 幫我寫一個 script 啟動 local openssl server
 ```
+
+```
+幫我在 capture_openssl.sh 加上選項:
+不加參數就是現在的行為
+加上 "local" argument 的話就啟動 openssl server 在 port 4433, 不需要 socat
+```
