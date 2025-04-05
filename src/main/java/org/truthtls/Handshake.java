@@ -6,10 +6,24 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 public class Handshake {
+    // Constants for HandshakeType as defined in the TLS specification
+    public static final int CLIENT_HELLO = 1;
+    public static final int SERVER_HELLO = 2;
+    public static final int NEW_SESSION_TICKET = 4;
+    public static final int END_OF_EARLY_DATA = 5;
+    public static final int ENCRYPTED_EXTENSIONS = 8;
+    public static final int CERTIFICATE = 11;
+    public static final int CERTIFICATE_REQUEST = 13;
+    public static final int CERTIFICATE_VERIFY = 15;
+    public static final int FINISHED = 20;
+    public static final int KEY_UPDATE = 24;
+    public static final int MESSAGE_HASH = 254;
+
     // Public fields as requested
     public int msg_type;
     public int length;
     public byte[] data;
+    public Object object = null;  // New field for parsed handshake objects
     
     /**
      * Reads a Handshake message from the given input stream
@@ -36,6 +50,12 @@ public class Handshake {
         // Read data
         handshake.data = new byte[handshake.length];
         in.readFully(handshake.data);
+        
+        // Parse the data into appropriate object based on message type
+        if (handshake.msg_type == SERVER_HELLO) {
+            handshake.object = ServerHello.read(handshake.data);
+        }
+        // Additional message types can be handled here as they are implemented
         
         return handshake;
     }
@@ -84,6 +104,16 @@ public class Handshake {
         System.out.println("Handshake Type: " + msg_type);
         System.out.println("Length: " + length);
         Utils.hexdump("Handshake Data", data);
+        
+        // If object is parsed, also dump its contents
+        if (object != null) {
+            System.out.println("Parsed Object:");
+            if (object instanceof ServerHello) {
+                ((ServerHello) object).dump();
+            } else {
+                System.out.println("  " + object.toString());
+            }
+        }
     }
     
 }

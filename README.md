@@ -209,3 +209,51 @@ byte[] data
 在 readTLSRecords() 中, 每讀到一個 record, 就判斷是不是 type = 22 (先不要提出 constant)
 如果是, 就用 data 生成 Handshake 並 dump
 ```
+
+終於來到了 ServerHello
+
+```
+幫我寫一個 class TLSRecord
+從 java.io.DataInput 讀出資料
+
+資料的 layout 如下. integer 都是 unsigned, big-endian.
+
+      struct {
+          ProtocolVersion legacy_version = 0x0303;    // 2 bytes. must be 0x0303.
+          Random random;                              // 32 bytes[]
+          opaque legacy_session_id_echo<0..32>;       // 1 byte length, then byte[length]
+          CipherSuite cipher_suite;                   // 2 byte integer
+          uint8 legacy_compression_method = 0;        // 1 byte. must be 0
+          Extension extensions<6..2^16-1>;            // 2 byte length, then byte[length]
+      } ServerHello;
+      
+讀出成下面的樣子
+class ServerHello 有下面幾個 public field, 不用 getter setter
+int cipher_suite
+byte[] extension_data
+```
+
+```
+幫我建立 Java 的 class Handshake, 通通建立成 int constant, 維持原來的 naming
+enum {
+client_hello(1),
+server_hello(2),
+new_session_ticket(4),
+end_of_early_data(5),
+encrypted_extensions(8),
+certificate(11),
+certificate_request(13),
+certificate_verify(15),
+finished(20),
+key_update(24),
+message_hash(254),
+(255)
+} HandshakeType;
+```
+上面的 prompt 不小心講錯了. 本來想要建立獨立的 class, 現在變成在 Handshake 裡面的 constant 了. 也行.
+
+```
+在 class Handshake 的 read() 中, 新增一個 public field 
+Object object = null;
+如果 msg_type 是 handshake, 就用 data 把 Handshake object 建出來
+```
