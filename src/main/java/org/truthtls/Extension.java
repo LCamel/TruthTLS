@@ -9,6 +9,30 @@ import java.io.IOException;
  * Class for parsing TLS extension structures
  */
 public class Extension {
+    // Extension type constants from RFC standards
+    public static final int SERVER_NAME = 0;                           /* RFC 6066 */
+    public static final int MAX_FRAGMENT_LENGTH = 1;                   /* RFC 6066 */
+    public static final int STATUS_REQUEST = 5;                        /* RFC 6066 */
+    public static final int SUPPORTED_GROUPS = 10;                     /* RFC 8422, 7919 */
+    public static final int SIGNATURE_ALGORITHMS = 13;                 /* RFC 8446 */
+    public static final int USE_SRTP = 14;                            /* RFC 5764 */
+    public static final int HEARTBEAT = 15;                           /* RFC 6520 */
+    public static final int APPLICATION_LAYER_PROTOCOL_NEGOTIATION = 16; /* RFC 7301 */
+    public static final int SIGNED_CERTIFICATE_TIMESTAMP = 18;         /* RFC 6962 */
+    public static final int CLIENT_CERTIFICATE_TYPE = 19;              /* RFC 7250 */
+    public static final int SERVER_CERTIFICATE_TYPE = 20;              /* RFC 7250 */
+    public static final int PADDING = 21;                             /* RFC 7685 */
+    public static final int PRE_SHARED_KEY = 41;                      /* RFC 8446 */
+    public static final int EARLY_DATA = 42;                          /* RFC 8446 */
+    public static final int SUPPORTED_VERSIONS = 43;                   /* RFC 8446 */
+    public static final int COOKIE = 44;                              /* RFC 8446 */
+    public static final int PSK_KEY_EXCHANGE_MODES = 45;               /* RFC 8446 */
+    public static final int CERTIFICATE_AUTHORITIES = 47;              /* RFC 8446 */
+    public static final int OID_FILTERS = 48;                         /* RFC 8446 */
+    public static final int POST_HANDSHAKE_AUTH = 49;                 /* RFC 8446 */
+    public static final int SIGNATURE_ALGORITHMS_CERT = 50;            /* RFC 8446 */
+    public static final int KEY_SHARE = 51;                           /* RFC 8446 */
+    
     // Public fields as requested
     public int type;  // extension_type
     public byte[] data; // extension_data
