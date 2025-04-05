@@ -20,6 +20,9 @@ public class Keys {
     // Store transcript data
     private ByteArrayOutputStream transcript = new ByteArrayOutputStream();
     
+    // Pre-Shared Key, initialized to all zeros
+    private byte[] PSK = new byte[32]; // 32 bytes = SHA-256 hash length
+    
     /**
      * Constructor - generates a new secp256r1 key pair upon instantiation
      * @throws RuntimeException if key generation fails

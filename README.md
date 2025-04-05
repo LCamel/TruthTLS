@@ -414,3 +414,26 @@ source myenv/bin/activate && python test_hkdf.py
 看起來 test_hkdf.py 裡面的測試資料是正確的.
 幫我用 Java 實作 HKDF 的 extract 和 expand, 並且用 test_hkdf.py 的測試資料做比對, 寫 Java 的 unit test.
 ```
+
+```
+我想要使用 HKDF.java 實作 TLS 1.3 的 Key Schedule
+幫我依照下面的 spec 實作. 不用考慮 optimization.
+
+HKDF-Expand-Label(Secret, Label, Context, Length) =
+HKDF-Expand(Secret, HkdfLabel, Length)
+Where HkdfLabel is specified as:
+struct {
+uint16 length = Length;
+opaque label<7..255> = "tls13 " + Label;
+opaque context<0..255> = Context;
+} HkdfLabel;
+Derive-Secret(Secret, Label, Messages) =
+HKDF-Expand-Label(Secret, Label,
+Transcript-Hash(Messages), Hash.length)
+```
+
+```
+幫我在 Keys.java 裡面新增一個 private field byte[] PSK, 不用 getter setter.
+初始值為 hash 長度的 zero bytes
+```
+
