@@ -333,3 +333,18 @@ byte[] key_exchange
 在 class Extension 中, 新增一個 public field Object object.
 判斷 type, 如果是 KeyShareEntry, 則從 data 建立 object.
 ```
+
+現在終於層層 parse 出 server key share 了
+需要 ECDHE
+
+```
+我有我的 secp256r1 PrivateKey
+我有對方的 uncompressed public key 的 bytes
+幫我在 Keys class 裡面加一段 code 計算出 shared secret, 存在 Keys 的 field 裡
+```
+
+```
+在 Client.java 中
+1. 把 Keys 提到 Client 的 instance field
+2. 在 readTLSRecords() 中, 判斷如果 handshake 裡面是 server hello, 則讀出 key share extension 來呼叫 Keys 的 computeSharedSecret
+```

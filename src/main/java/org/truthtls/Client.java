@@ -11,6 +11,9 @@ public class Client {
     private static final String SERVER_HOST = "localhost"; //"google.com";
     private static final int SERVER_PORT = 4433; //443;
     private static final int BUFFER_SIZE = 4096;
+    
+    // 将 Keys 移到 Client 的实例字段
+    private Keys keys;
 
     /**
      * Connects to google.com on port 443, sends a predefined TLS request,
@@ -31,7 +34,7 @@ public class Client {
             System.arraycopy(sessionIdBytes, 0, requestData, 0x64 - 0x38, 32);
             
             // Generate EC key pair and get uncompressed public key
-            Keys keys = new Keys();
+            keys = new Keys();
             byte[] uncompressedPublicKey = keys.getUncompressedPublicKey();
             
             // Replace the last 65 bytes of the request with the uncompressed public key
@@ -86,6 +89,25 @@ public class Client {
                         System.out.println("Handshake record detected, creating Handshake object:");
                         Handshake handshake = Handshake.read(record.data);
                         handshake.dump();
+                        
+                        // 检查是否为 ServerHello 消息
+                        if (handshake.msg_type == Handshake.SERVER_HELLO && handshake.object instanceof ServerHello) {
+                            ServerHello serverHello = (ServerHello) handshake.object;
+                            
+                            // 查找 key_share extension
+                            for (Extension extension : serverHello.extensions) {
+                                if (extension.type == Extension.KEY_SHARE && extension.object instanceof KeyShareEntry) {
+                                    KeyShareEntry keyShareEntry = (KeyShareEntry) extension.object;
+                                    
+                                    System.out.println("Found server KeyShareEntry, computing shared secret...");
+                                    
+                                    // 计算共享密钥
+                                    keys.computeSharedSecret(keyShareEntry.key_exchange);
+                                    
+                                    break; // 找到 key_share 后跳出循环
+                                }
+                            }
+                        }
                     }
                 } else {
                     // No data available, wait for 1 second
