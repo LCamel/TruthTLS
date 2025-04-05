@@ -348,3 +348,24 @@ byte[] key_exchange
 1. 把 Keys 提到 Client 的 instance field
 2. 在 readTLSRecords() 中, 判斷如果 handshake 裡面是 server hello, 則讀出 key share extension 來呼叫 Keys 的 computeSharedSecret
 ```
+
+現在困難來了.
+
+前面都有 wireshark 幫忙對答案. 後面這段要走很遠才有得對答案.
+
+第一個可以檢核的點應該是用 server_handshake_traffic_secret 解碼 encrypted extensions.
+
+如果要縮短路程, 可能是連接 local openssl server 的 key log file.
+
+整件事情有幾個 input:
+- client DH private key
+- server DH public key
+- ClientHello + ServerHello transcription
+- 實作正確的演算法
+
+
+```
+幫我在 Utils.java 裡面新增一個 write byte[] to String path 的檔案的 method
+throw runtime exception
+另外也加一個從 offset 之後的內容寫入檔案的
+```

@@ -1,6 +1,10 @@
 package org.truthtls;
 
 import java.security.SecureRandom;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class Utils {
     // 使用 SecureRandom 來生成隨機字節
@@ -152,5 +156,40 @@ public class Utils {
             }
         }
         System.out.println(String.format("%-49s %s", hex.toString(), ascii.toString()));
+    }
+
+    /**
+     * Writes a byte array to a file at the specified path.
+     * 
+     * @param data The byte array to write
+     * @param path The file path to write to
+     * @throws RuntimeException if there is an error writing to the file
+     */
+    public static void writeToFile(byte[] data, String path) {
+        try (FileOutputStream fos = new FileOutputStream(path)) {
+            fos.write(data);
+        } catch (IOException e) {
+            throw new RuntimeException("Error writing to file: " + path, e);
+        }
+    }
+    
+    /**
+     * Writes a portion of a byte array to a file at the specified path.
+     * 
+     * @param data The byte array containing the data to write
+     * @param offset The offset in the byte array to start from
+     * @param path The file path to write to
+     * @throws RuntimeException if there is an error writing to the file or if the offset is invalid
+     */
+    public static void writeToFile(byte[] data, int offset, String path) {
+        if (offset < 0 || offset >= data.length) {
+            throw new RuntimeException("Invalid offset: " + offset);
+        }
+        
+        try (FileOutputStream fos = new FileOutputStream(path)) {
+            fos.write(data, offset, data.length - offset);
+        } catch (IOException e) {
+            throw new RuntimeException("Error writing to file: " + path, e);
+        }
     }
 }
