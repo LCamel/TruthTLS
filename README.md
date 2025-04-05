@@ -369,3 +369,7 @@ byte[] key_exchange
 throw runtime exception
 另外也加一個從 offset 之後的內容寫入檔案的
 ```
+
+```
+幫我寫一個 script 啟動 local openssl server
+```
