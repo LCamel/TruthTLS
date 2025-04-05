@@ -310,3 +310,21 @@ key_share(51), /* RFC 8446 */
 (65535)
 } ExtensionType;
 ```
+
+
+
+```
+幫我寫一個 class KeyShareEntry
+從 java.io.DataInput 讀出資料
+
+資料的 layout 如下. integer 都是 unsigned, big-endian.
+struct {
+NamedGroup group; // 2 byte integer
+opaque key_exchange<1..2^16-1>; // 2 byte length, then byte[length]
+} KeyShareEntry;
+
+
+class KeyShareEntry 有下面這幾個 public field, 不用 getter setter
+int group
+byte[] key_exchange
+```
