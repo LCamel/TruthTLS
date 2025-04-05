@@ -90,3 +90,20 @@ a8 8d c6 18 97 c3 a6 fe d9 f6 55 e5 e8 f2 64 27
 在最外層捕捉 Exception 轉成 RuntimeException 再 throw
 過程中使用 class Utils
 ```
+
+現在看起來 Client 可以連上 google 並且拿到 response 了.
+不過有些東西應該要換掉.
+Random: offset 0x43, length 32
+Session ID: offset 0x64, length 32
+Key share: offset 0xBF, length 65
+
+```prompt
+幫我在 class Utils 裡面新增一個能夠拿出 random byte[] 的 method
+```
+
+```
+幫我在 Client 的 connect() 中,
+把 request 的兩段區間代換成 random bytes 之後再送出
+"Random": offset (0x43 - 0x38), length 32
+"Session ID": offset (0x64 - 0x38), length 32
+```

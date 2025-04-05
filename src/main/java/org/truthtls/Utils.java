@@ -1,6 +1,27 @@
 package org.truthtls;
 
+import java.security.SecureRandom;
+
 public class Utils {
+    // 使用 SecureRandom 來生成隨機字節
+    private static final SecureRandom secureRandom = new SecureRandom();
+    
+    /**
+     * 生成指定長度的隨機字節陣列
+     * 
+     * @param length 需要生成的字節數
+     * @return 隨機字節陣列
+     */
+    public static byte[] getRandomBytes(int length) {
+        if (length < 0) {
+            throw new IllegalArgumentException("Length must be a non-negative integer");
+        }
+        
+        byte[] randomBytes = new byte[length];
+        secureRandom.nextBytes(randomBytes);
+        return randomBytes;
+    }
+
     /**
      * Converts a hexadecimal string to a byte array.
      * Can handle both continuous hex strings and space-separated hex strings.

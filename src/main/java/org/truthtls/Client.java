@@ -7,8 +7,8 @@ import java.net.Socket;
 
 public class Client {
 
-    private static final String SERVER_HOST = "google.com";
-    private static final int SERVER_PORT = 443;
+    private static final String SERVER_HOST = "localhost"; //"google.com";
+    private static final int SERVER_PORT = 4433; //443;
     private static final int BUFFER_SIZE = 4096;
 
     /**
@@ -22,6 +22,15 @@ public class Client {
         try {
             // Convert the hex request to byte array
             byte[] requestData = Utils.hexStringToByteArray(tlsRequestHex);
+            
+            byte[] randomBytes = Utils.getRandomBytes(32);
+            System.arraycopy(randomBytes, 0, requestData, 0x43 - 0x38, 32);
+            
+            byte[] sessionIdBytes = Utils.getRandomBytes(32);
+            System.arraycopy(sessionIdBytes, 0, requestData, 0x64 - 0x38, 32);
+            
+            // Display the modified request with randomized sections
+            Utils.hexdump("Modified TLS request", requestData);
             
             System.out.println("Connecting to " + SERVER_HOST + ":" + SERVER_PORT);
             
