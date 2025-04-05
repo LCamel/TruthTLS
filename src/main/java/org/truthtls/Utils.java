@@ -35,4 +35,70 @@ public class Utils {
         
         return data;
     }
+
+    /**
+     * Prints a formatted hexdump of the byte array to stdout with a title.
+     * The output format includes both hexadecimal and ASCII representation.
+     * 
+     * @param title A title to print before the hexdump
+     * @param bytes The byte array to dump
+     */
+    public static void hexdump(String title, byte[] bytes) {
+        if (title != null && !title.isEmpty()) {
+            System.out.println(title + ":");
+        }
+        
+        if (bytes == null || bytes.length == 0) {
+            System.out.println("[Empty]");
+            return;
+        }
+        
+        int bytesPerLine = 16;
+        StringBuilder hex = new StringBuilder();
+        StringBuilder ascii = new StringBuilder();
+        
+        for (int i = 0; i < bytes.length; i++) {
+            // Print offset at the beginning of each line
+            if (i % bytesPerLine == 0) {
+                if (i > 0) {
+                    // Print the ASCII representation at the end of the previous line
+                    System.out.println(String.format("%-49s %s", hex.toString(), ascii.toString()));
+                    hex.setLength(0);
+                    ascii.setLength(0);
+                }
+                System.out.print(String.format("%04X: ", i));
+            }
+            
+            // Add hex representation
+            hex.append(String.format("%02X ", bytes[i]));
+            
+            // Add a separator after 8 bytes for better readability
+            if ((i % bytesPerLine) == 7) {
+                hex.append(" ");
+            }
+            
+            // Add ASCII representation (printable characters only)
+            if (bytes[i] >= 32 && bytes[i] <= 126) {
+                ascii.append((char) bytes[i]);
+            } else {
+                ascii.append('.');
+            }
+        }
+        
+        // Print the last line, padding if necessary
+        int remaining = bytes.length % bytesPerLine;
+        if (remaining > 0) {
+            // Calculate how many spaces we need to add for padding
+            int spacesToAdd = (bytesPerLine - remaining) * 3;
+            // Add extra space if we're padding past the 8-byte separator position
+            if (remaining <= 8) {
+                spacesToAdd += 1;
+            }
+            
+            for (int i = 0; i < spacesToAdd; i++) {
+                hex.append(" ");
+            }
+        }
+        System.out.println(String.format("%-49s %s", hex.toString(), ascii.toString()));
+    }
 }
