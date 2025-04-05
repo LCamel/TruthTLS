@@ -67,7 +67,7 @@ public class TLSRecord {
      * @param title The title to display before the hexdump
      */
     public void hexdump(String title) {
-        String fullTitle = String.format("%s (Type: 0x%04X)", title, this.type);
+        String fullTitle = String.format("%s (Type: 0x%02X)", title, this.type);
         Utils.hexdump(fullTitle, this.data);
     }
 }

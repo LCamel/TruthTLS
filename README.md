@@ -172,3 +172,40 @@ byte[] data; // from "fragment"
 每讀一筆 record 就 hexdump 一筆
 如果讀完一筆後, 1 秒內沒有新的 available bytes, 就結束程式
 ```
+
+現在要開始 handle record 的內容了.
+在這邊先偷工減料!
+跳過 handshake 可能會被切成 fragment 的問題!!!!
+也不考慮 coalesce !
+
+```
+幫我寫一個 class Handshake
+從 java.io.DataInput 讀出資料
+
+資料的 layout 如下. integer 都是 unsigned, big-endian.
+
+      struct {
+          HandshakeType msg_type;    /* handshake type */ // 1 byte
+          uint24 length;             /* remaining bytes in message */ // 3 bytes
+          // "length" bytes
+      } Handshake;
+
+讀出成
+class Handshake 有下面幾個 public field, 不用 getter setter
+int msg_type
+int length
+byte[] data
+```
+
+```
+新增一個 Handshake 的 read(byte[]) method, 輸入一個 byte[], 內部包裝一個 DataInputStream 以後,  給原來的 read(DataInput) 處理
+```
+
+```
+在 Handshake 中新增一個 dump(), 顯示每個 fields
+```
+
+```
+在 readTLSRecords() 中, 每讀到一個 record, 就判斷是不是 type = 22 (先不要提出 constant)
+如果是, 就用 data 生成 Handshake 並 dump
+```

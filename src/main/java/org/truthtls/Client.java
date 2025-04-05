@@ -80,6 +80,13 @@ public class Client {
                     
                     // Perform hexdump on the record
                     record.hexdump("TLS Record #" + recordCount);
+                    
+                    // Check if this is a handshake record (type 22)
+                    if (record.type == 22) {
+                        System.out.println("Handshake record detected, creating Handshake object:");
+                        Handshake handshake = Handshake.read(record.data);
+                        handshake.dump();
+                    }
                 } else {
                     // No data available, wait for 1 second
                     System.out.println("Waiting for more data...");
