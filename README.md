@@ -385,3 +385,32 @@ throw runtime exception
 加上一個 public function addTranscript(byte[]) 去 append
 再加上一個 public function getTranscript(byte[]) 去拿目前的 stream 中的 append 在一起的 byte[]
 ```
+
+```
+幫我在 client hello 送出後, 把 request data 跳過最前面 5 個 byte 之後的所有內容寫入 transcript
+```
+
+```
+幫我把來自 server 的 handshake 都寫入 transcript
+```
+
+```
+幫我依照 RFC 5869 實作 HKDF-Extract 和 HKDF-Expand 到 class HKDF 中
+我只需要 SHA256
+```
+```
+用 RFC 5869 的 Appendix A 中 SHA256 的 test vector 寫一些 test case
+```
+
+```
+我想要用 SHA256 hash
+幫我用 python 的 cryptography 套件寫一個 HKDF 的測試程式
+用 HKDF 的 RFC 的 Appendex 中的 test vector
+```
+```
+source myenv/bin/activate && python test_hkdf.py
+```
+```
+看起來 test_hkdf.py 裡面的測試資料是正確的.
+幫我用 Java 實作 HKDF 的 extract 和 expand, 並且用 test_hkdf.py 的測試資料做比對, 寫 Java 的 unit test.
+```
