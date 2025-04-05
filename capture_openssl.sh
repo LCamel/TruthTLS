@@ -37,6 +37,9 @@ cat request.txt | openssl s_client -connect localhost:4433 \
   -ciphersuites TLS_AES_128_GCM_SHA256 \
   -sigalgs "rsa_pkcs1_sha256:rsa_pss_rsae_sha256:ecdsa_secp256r1_sha256" \
   -curves secp256r1 \
+  -no_etm \
+  -no_ems \
+  -no_ticket \
   -ign_eof \
   -quiet
 
