@@ -128,3 +128,7 @@ new 出 instance 時就會生出 secp256r1 的 key pair, 存在 public data memb
 ```
 把 Client 的 request 的最後的 bytes 用 Keys.getUncompressedPublicKey() 的內容取代再送出
 ```
+
+12:29
+要來真的處理 response 了.
+先手動抽出原本 dump 的 method 到別處.

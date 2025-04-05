@@ -54,45 +54,49 @@ public class Client {
                 
                 // Get input stream and read response
                 InputStream in = socket.getInputStream();
-                byte[] buffer = new byte[BUFFER_SIZE];
-                int bytesRead;
-                int totalBytesRead = 0;
-                
-                // Create a dynamic byte array to store all response data
-                byte[] responseData = new byte[0];
-                
-                while ((bytesRead = in.read(buffer)) != -1) {
-                    // Extend the response array to accommodate new data
-                    byte[] newResponseData = new byte[responseData.length + bytesRead];
-                    System.arraycopy(responseData, 0, newResponseData, 0, responseData.length);
-                    System.arraycopy(buffer, 0, newResponseData, responseData.length, bytesRead);
-                    responseData = newResponseData;
-                    
-                    totalBytesRead += bytesRead;
-                    System.out.println("Received " + bytesRead + " bytes...");
-                    
-                    // Some servers may not close the connection, so we need to break manually
-                    // This is a simple approach - in real applications you would parse the TLS records
-                    if (totalBytesRead > 0 && in.available() == 0) {
-                        try {
-                            // Give the server a short time to send more data
-                            Thread.sleep(100);
-                            if (in.available() == 0) {
-                                break;
-                            }
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                            break;
-                        }
-                    }
-                }
-                
-                System.out.println("Total bytes received: " + totalBytesRead);
-                Utils.hexdump("Response", responseData);
+                getResponseData(in);
             }
             
         } catch (IOException e) {
             throw new RuntimeException("Connection error: " + e.getMessage(), e);
         }
+    }
+
+    private void getResponseData(InputStream in) throws IOException {
+        byte[] buffer = new byte[BUFFER_SIZE];
+        int bytesRead;
+        int totalBytesRead = 0;
+        
+        // Create a dynamic byte array to store all response data
+        byte[] responseData = new byte[0];
+        
+        while ((bytesRead = in.read(buffer)) != -1) {
+            // Extend the response array to accommodate new data
+            byte[] newResponseData = new byte[responseData.length + bytesRead];
+            System.arraycopy(responseData, 0, newResponseData, 0, responseData.length);
+            System.arraycopy(buffer, 0, newResponseData, responseData.length, bytesRead);
+            responseData = newResponseData;
+            
+            totalBytesRead += bytesRead;
+            System.out.println("Received " + bytesRead + " bytes...");
+            
+            // Some servers may not close the connection, so we need to break manually
+            // This is a simple approach - in real applications you would parse the TLS records
+            if (totalBytesRead > 0 && in.available() == 0) {
+                try {
+                    // Give the server a short time to send more data
+                    Thread.sleep(100);
+                    if (in.available() == 0) {
+                        break;
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+        }
+        
+        System.out.println("Total bytes received: " + totalBytesRead);
+        Utils.hexdump("Response", responseData);
     }
 }
