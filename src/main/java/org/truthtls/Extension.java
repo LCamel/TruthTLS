@@ -3,7 +3,6 @@ package org.truthtls;
 import java.io.ByteArrayInputStream;
 import java.io.DataInput;
 import java.io.DataInputStream;
-import java.io.IOException;
 
 /**
  * Class for parsing TLS extension structures
@@ -36,6 +35,7 @@ public class Extension {
     // Public fields as requested
     public int type;  // extension_type
     public byte[] data; // extension_data
+    public Object object = null; // Parsed object based on extension type
     
     /**
      * Reads an Extension from the given DataInput
@@ -58,9 +58,14 @@ public class Extension {
             extension.data = new byte[dataLength];
             in.readFully(extension.data);
             
+            // Parse specific extension types
+            if (extension.type == KEY_SHARE) {
+                extension.object = KeyShareEntry.read(extension.data);
+            }
+            
             return extension;
-        } catch (IOException e) {
-            throw new RuntimeException("I/O error while reading Extension", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Error while reading Extension", e);
         }
     }
     
@@ -106,5 +111,15 @@ public class Extension {
         System.out.println("Extension Type: 0x" + Integer.toHexString(type));
         System.out.println("Extension Data Length: " + data.length);
         Utils.hexdump("Extension Data", data);
+        
+        // If parsed object exists, also dump its information
+        if (object != null) {
+            System.out.println("Parsed Extension Content:");
+            if (object instanceof KeyShareEntry) {
+                ((KeyShareEntry) object).dump();
+            } else {
+                System.out.println("  " + object.toString());
+            }
+        }
     }
 }

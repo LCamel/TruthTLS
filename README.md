@@ -328,3 +328,8 @@ class KeyShareEntry 有下面這幾個 public field, 不用 getter setter
 int group
 byte[] key_exchange
 ```
+
+```
+在 class Extension 中, 新增一個 public field Object object.
+判斷 type, 如果是 KeyShareEntry, 則從 data 建立 object.
+```
