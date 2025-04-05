@@ -5,7 +5,38 @@ import java.security.SecureRandom;
 public class Utils {
     // 使用 SecureRandom 來生成隨機字節
     private static final SecureRandom secureRandom = new SecureRandom();
-    
+
+    /**
+     * Asserts that the expected integer equals the actual integer.
+     * Throws a RuntimeException with the given message if not equal.
+     * 
+     * @param msg      The error message to include if assertion fails
+     * @param expected The expected integer value
+     * @param actual   The actual integer value
+     * @throws RuntimeException if expected does not equal actual
+     */
+    public static void assertEquals(String msg, int expected, int actual) {
+        if (expected != actual) {
+            throw new RuntimeException(msg + ": expected: " + expected + " but was: " + actual);
+        }
+    }
+
+    /**
+     * Asserts that the actual integer is at most the expected integer.
+     * Throws a RuntimeException with the given message if actual is greater than
+     * expected.
+     * 
+     * @param msg      The error message to include if assertion fails
+     * @param expected The maximum expected integer value
+     * @param actual   The actual integer value
+     * @throws RuntimeException if actual is greater than expected
+     */
+    public static void assertAtMost(String msg, int expected, int actual) {
+        if (actual > expected) {
+            throw new RuntimeException(msg + ": expected at most: " + expected + " but was: " + actual);
+        }
+    }
+
     /**
      * 生成指定長度的隨機字節陣列
      * 

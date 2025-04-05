@@ -1,5 +1,6 @@
 package org.truthtls;
 
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -52,9 +53,12 @@ public class Client {
                 
                 System.out.println("Request sent, waiting for response...");
                 
-                // Get input stream and read response
+                // Get input stream and create DataInputStream for reading TLSRecords
                 InputStream in = socket.getInputStream();
-                getResponseData(in);
+                DataInputStream dis = new DataInputStream(in);
+                
+                // Read TLS records from the stream
+                readTLSRecords(dis);
             }
             
         } catch (IOException e) {
@@ -62,41 +66,47 @@ public class Client {
         }
     }
 
-    private void getResponseData(InputStream in) throws IOException {
-        byte[] buffer = new byte[BUFFER_SIZE];
-        int bytesRead;
-        int totalBytesRead = 0;
+    private void readTLSRecords(DataInputStream dis) {
+        int recordCount = 0;
+        boolean hasMoreData = true;
         
-        // Create a dynamic byte array to store all response data
-        byte[] responseData = new byte[0];
-        
-        while ((bytesRead = in.read(buffer)) != -1) {
-            // Extend the response array to accommodate new data
-            byte[] newResponseData = new byte[responseData.length + bytesRead];
-            System.arraycopy(responseData, 0, newResponseData, 0, responseData.length);
-            System.arraycopy(buffer, 0, newResponseData, responseData.length, bytesRead);
-            responseData = newResponseData;
-            
-            totalBytesRead += bytesRead;
-            System.out.println("Received " + bytesRead + " bytes...");
-            
-            // Some servers may not close the connection, so we need to break manually
-            // This is a simple approach - in real applications you would parse the TLS records
-            if (totalBytesRead > 0 && in.available() == 0) {
-                try {
-                    // Give the server a short time to send more data
-                    Thread.sleep(100);
-                    if (in.available() == 0) {
+        try {
+            while (hasMoreData) {
+                // Check if there is data available to read
+                if (dis.available() > 0) {
+                    // Read a TLS record from the stream
+                    TLSRecord record = TLSRecord.read(dis);
+                    recordCount++;
+                    
+                    // Perform hexdump on the record
+                    record.hexdump("TLS Record #" + recordCount);
+                } else {
+                    // No data available, wait for 1 second
+                    System.out.println("Waiting for more data...");
+                    
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
                         break;
                     }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    break;
+                    
+                    // After waiting, check if there's new data
+                    if (dis.available() == 0) {
+                        hasMoreData = false;
+                        System.out.println("No more data received after waiting 1 second. Ending connection.");
+                    }
                 }
             }
+            
+            System.out.println("Total TLS records received: " + recordCount);
+            
+        } catch (IOException e) {
+            throw new RuntimeException("Error reading TLS records: " + e.getMessage(), e);
         }
-        
-        System.out.println("Total bytes received: " + totalBytesRead);
-        Utils.hexdump("Response", responseData);
+    }
+
+    private void getResponseData(InputStream in) throws IOException {
+        // This method is no longer used and can be removed or refactored.
     }
 }

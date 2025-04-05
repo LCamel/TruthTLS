@@ -132,3 +132,43 @@ new 出 instance 時就會生出 secp256r1 的 key pair, 存在 public data memb
 12:29
 要來真的處理 response 了.
 先手動抽出原本 dump 的 method 到別處.
+
+
+```
+幫我寫兩個比較 integer 的 method
+assertEquals(msg, expected, actual)
+assertAtMost(msg, expected, actual)
+失敗則丟出 RuntimeException
+```
+
+```
+幫我寫一個 class TLSRecord
+從 java.io.DataInput 讀出資料
+
+資料的 layout 如下. integer 都是 unsigned, big-endian.
+
+struct {
+ContentType type; // 1 bytes integer
+ProtocolVersion legacy_record_version; // 2 bytes integer, should be 0x0303
+uint16 length; // 2 bytes integer, should be at most 2^14
+opaque fragment[TLSPlaintext.length]; // "length" bytes 
+} TLSPlaintext;
+
+TLSRecord 有兩個 public field, 不用 getter setter:
+int type; // from "type"
+byte[] data; // from "fragment"
+```
+
+
+```
+幫我修改 class TLSRecord
+1. 使用 class Utils 的 assert methods 來檢查
+2. 新增一個 hexdump(title) method, 使用 Utils 的 hexdump. 也要在 title 顯示 type
+3. 不要往外丟 checked exception, 轉成 RuntimeException 再丟
+```
+
+```
+在 class Client 的 connect() 中, 將 DataInputStream 用迴圈讀出多筆 TLSRecord
+每讀一筆 record 就 hexdump 一筆
+如果讀完一筆後, 1 秒內沒有新的 available bytes, 就結束程式
+```
