@@ -107,3 +107,24 @@ Key share: offset 0xBF, length 65
 "Random": offset (0x43 - 0x38), length 32
 "Session ID": offset (0x64 - 0x38), length 32
 ```
+
+```
+幫我寫一個 class Keys
+new 出 instance 時就會生出 secp256r1 的 key pair, 存在 public data member 裡
+再提供一個 method, 會 return 65 bytes 的 uncompressed key
+```
+
+```
+幫我寫一個 Java class Keys
+new 出 instance 時就會生出 secp256r1 的 key pair, 存在 public data member 裡
+再提供一個 method, 會 return 65 bytes 的 uncompressed key
+
+我希望 bigIntegerToBytes 不接受 negative value
+如果 integer 轉成 bytes 比 length 長, 就丟 runtime exception
+
+我希望把 method 丟出的 exception 都包裝成 runtime exception
+```
+
+```
+把 Client 的 request 的最後的 bytes 用 Keys.getUncompressedPublicKey() 的內容取代再送出
+```

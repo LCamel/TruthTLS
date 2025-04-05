@@ -29,7 +29,16 @@ public class Client {
             byte[] sessionIdBytes = Utils.getRandomBytes(32);
             System.arraycopy(sessionIdBytes, 0, requestData, 0x64 - 0x38, 32);
             
-            // Display the modified request with randomized sections
+            // Generate EC key pair and get uncompressed public key
+            Keys keys = new Keys();
+            byte[] uncompressedPublicKey = keys.getUncompressedPublicKey();
+            
+            // Replace the last 65 bytes of the request with the uncompressed public key
+            // The uncompressed key format is exactly 65 bytes (1 byte prefix + 32 bytes X + 32 bytes Y)
+            int pubKeyOffset = requestData.length - 65;
+            System.arraycopy(uncompressedPublicKey, 0, requestData, pubKeyOffset, 65);
+            
+            // Display the modified request with randomized sections and new public key
             Utils.hexdump("Modified TLS request", requestData);
             
             System.out.println("Connecting to " + SERVER_HOST + ":" + SERVER_PORT);
