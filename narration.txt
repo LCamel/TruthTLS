@@ -1,0 +1,44 @@
+今天我想介紹的是 TruthTLS
+
+有些我可以存取的網站, 上面的資料隨時會不見. 我想用 archive.org 存起來給別人看, 但有時會被 censor.
+
+透過 TruthTLS, archive.org 願意相信我的確在那個網站看到了內容. 進而留下 snapshot 給別人看.
+
+TruthTLS 就像 TLSNotary 一樣, 只是沒有 ZK, 並使用更少的 MPC 計算.
+
+一般的 MPC-TLS 為了不揭露完整的內容給 Verifier 看, 會在 MPC 中進行解密. 並且用 ZK 做 redaction. 但是對於沒有 sensitive data 的 response 來說, 這樣顯得 overkill 了.
+
+也因此在 state of the art, 即便是 200k 的圖片, 也已經顯得沈重.
+
+針對這種需求, TruthTLS 的做法是: 直接 reveal keys. 揭露 client write key 給 Prover 不會影響安全. 而揭露 server write key 給 Verifier 也一樣不影響安全.
+因為不用在 MPC 中解密, 這樣 response size 再大也不怕.
+
+這樣的做法除了可以用在 anti-censorship 的場景之外, 也適用於處理 "I own the item" 這種 access-restricted but non-sensitive data 的場合.
+
+藉由針對這些場合做最佳化, 我們可以處理更大的 response, 使用更少的 resouce. 希望這樣可以有更多的應用.
+
+
+
+
+
+
+
+
+Today I want to talk about TruthTLS.
+
+Some websites I can access might delete their content at any time. I want to save this content on archive.org for others to see. But sometimes this gets censored.
+
+TruthTLS helps archive.org believe that I really saw this content on the website. This lets them save a snapshot that others can view.
+
+TruthTLS works like TLSNotary but is simpler. It doesn't use zero-knowledge proofs and needs less multi-party computation.
+
+Regular MPC-TLS systems decrypt data within secure computation. They also use zero-knowledge proofs for hiding parts of the data. But this is too much work when there's no sensitive data to protect.
+
+Even with today's best methods, handling a 200k image is resource-heavy.
+
+TruthTLS takes a different approach. It simply reveals the encryption keys. Sharing the client write key with the Prover is safe. Sharing the server write key with the Verifier is also safe.
+Since we don't need to decrypt within MPC, we can handle responses of any size.
+
+This approach works well for fighting censorship. It's also good for proving things like "I own this item" when data is access-restricted but not sensitive.
+
+By focusing on these specific uses, we can handle larger responses with fewer resources. We hope this leads to more practical applications.
