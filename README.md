@@ -1,55 +1,53 @@
 # TruthTLS
 
-我想藉由實作來學習 TLSNotary.
+I want to learn about TLSNotary through implementation.
 
-1. 在一些應用中, 要被 verify 的 response 中沒有秘密. 我打算直接 reveal decryption key 給 Verifier. 這樣可以大幅降低 MPC 中的計算, 突破目前 response size 的限制.
-2. 實作 TLSNotary 還沒支援的 TLS 1.3
-3. 提供一個小而容易修改的 code base, 便於實驗和學習.
+1. In some applications, there are no secrets in the response that needs to be verified. I plan to directly reveal the decryption key to the Verifier. This can significantly reduce the computation in MPC and overcome current response size limitations.
+2. Implement TLS 1.3, which is not yet supported by TLSNotary.
+3. Provide a small, easy-to-modify codebase for experimentation and learning.
 
+According to the FAQ, TLSNotary does not yet support TLS 1.3.
 
-從 FAQ 來看, TLSNotary 目前還沒支援 TLS 1.3 .
+Additionally, TLSNotary's encryption/decryption is currently done within MPC. I want to try changing this approach to reduce computational overhead.
+(Previous discussion in [TLSNotary discord](https://discord.com/channels/943612659163602974/968798323341418547/1351479225454035005))
 
-另外目前 TLSNotary 的 encryption / decryption 應該是在 MPC 裡面做的. 我想試著改變這一點. 希望能讓計算量降低.
-(先前在 TLSNotary discord 的[討論](https://discord.com/channels/943612659163602974/968798323341418547/1351479225454035005))
+This is a project for [ETHGlobal Taipei 2025](https://ethglobal.com/events/taipei).
 
-這是在 [ETHGlobal Taipei 2025](https://ethglobal.com/events/taipei) 的 project.
+I'll develop a minimal TLS 1.3 client from scratch. As minimal as possible.
 
-我會從頭開發一個 minimal 的 TLS 1.3 client. 能多簡陋就多簡陋.
+I don't have time to develop MPC. I'll define the interface and use local computation for now.
 
-我也沒有時間開發 MPC. 我會把 interface 切出來, 先用 local computation 計算.
+I'll implement as much as I can within the time constraints.
 
-能寫多少算多少.
-
-先用中文寫, 最後再叫 AI 翻譯成英文.
+I'll write in Chinese first, and then ask AI to translate it into English at the end.
 
 ----
 
-現在是 5:33.
+It's 5:33 now.
 
-Client 兩種做法. 寫 code 產生. 拿現成的挖洞.
+There are two approaches for the Client: write code to generate it, or modify existing code.
 
-先選挖洞的.
+I'll start with modifying existing code.
 
-叫 Github Copilot - Agent - Claude 3.7 Sonnet 來幫忙.
+Called on Github Copilot - Agent - Claude 3.7 Sonnet for help.
 
 ```prompt
-幫我寫一個 script.
-開一個 local port forwarder 在 port 4433.
-用 openssl s_client 透過它去連接 google.com port 443. 送 HEAD request 就好. HTTP/1.1 . 用 TLS 1.3 .
-用 tcpdump 把內容 capture 下來. (不用 sudo)
-開 wireshark 讓我檢視內容.
+Help me write a script.
+Create a local port forwarder on port 4433.
+Use openssl s_client through it to connect to google.com port 443. Just send a HEAD request. HTTP/1.1. Use TLS 1.3.
+Capture the content with tcpdump. (without sudo)
+Open wireshark to view the contents.
 ```
 
 ![wireshark](image.png)
 
-
-但是顯然內容太多了. 只要最少的內容
+But the content is clearly too much. I only need minimal content:
 cipher_suite: TLS_AES_128_GCM_SHA256
 supported_versions: TLS 1.3
 signature_algorithms: rsa_pkcs1_sha256 / rsa_pss_rsae_sha256 / ecdsa_secp256r1_sha256
 supported_groups: secp256r1
 
-現在送出的 request 像這樣 (從 wireshark copy hexdump)
+The request being sent now looks like this (copied hexdump from wireshark):
 ```
 0000   16 03 01 00 c3 01 00 00 bf 03 03 67 81 67 36 7e
 0010   a8 8d c6 18 97 c3 a6 fe d9 f6 55 e5 e8 f2 64 27
@@ -69,88 +67,86 @@ supported_groups: secp256r1
 16030100c3010000bf0303678167367ea88dc61897c3a6fed9f655e5e8f264277e128df7635d4f52d8fa8320bf1212ea9b2d536dd6593d39c20a390bf4e2e16bae3ee9e039db6734c1e2c8fb0002130101000074000b000403000102000a000400020017000d00080006040108040403002b0003020304002d000201010033004700450017004104e32e315594197a08d8feea3eaf2792d5101d87a304f12a87aa4a52db3b827657716c359677f100ce616ef996a262da9af563d4b65f91bb122617fdd387ba6046
 
 ```prompt
-我希望有一個 Java method, 可以接受 16030100c3010000bf0303678167367ea88dc61897c3a6fed9f655e5e8f26427
-或接受
+I want a Java method that can accept 16030100c3010000bf0303678167367ea88dc61897c3a6fed9f655e5e8f26427
+or accept
 16 03 01 00 c3 01 00 00 bf 03 03 67 81 67 36 7e
 a8 8d c6 18 97 c3 a6 fe d9 f6 55 e5 e8 f2 64 27
-這樣的 input string
-傳回 byte[]
+as input strings
+and return byte[]
 ```
-
 
 ```prompt
-幫我新增一個 hexdump 的 util method
-給一個 title 和一個 byte[]
-印到 stdout
+Help me add a hexdump util method
+Given a title and a byte[]
+Print to stdout
 ```
 
 ```
-幫我新增一個 class Client
-新增一個不需要參數的 connect() method 在裡面.
-把這個 request 送到 google.com port 443
+Help me add a class Client
+Add a connect() method that doesn't require parameters.
+Send this request to google.com port 443
 16030100c3010000bf0303678167367ea88dc61897c3a6fed9f655e5e8f264277e128df7635d4f52d8fa8320bf1212ea9b2d536dd6593d39c20a390bf4e2e16bae3ee9e039db6734c1e2c8fb0002130101000074000b000403000102000a000400020017000d00080006040108040403002b0003020304002d000201010033004700450017004104e32e315594197a08d8feea3eaf2792d5101d87a304f12a87aa4a52db3b827657716c359677f100ce616ef996a262da9af563d4b65f91bb122617fdd387ba6046
-用基本的 Socket / OutputStream / InputStream / byte[]
-讀取所有的 response 到一個 byte[]
-然後 hexdump 出來
-在最外層捕捉 Exception 轉成 RuntimeException 再 throw
-過程中使用 class Utils
+Use basic Socket / OutputStream / InputStream / byte[]
+Read all responses to a byte[]
+Then hexdump it
+Catch Exceptions at the outermost level and convert to RuntimeException before throwing
+Use class Utils during the process
 ```
 
-現在看起來 Client 可以連上 google 並且拿到 response 了.
-不過有些東西應該要換掉.
+Now it looks like the Client can connect to Google and get a response.
+However, some things should be replaced.
 Random: offset 0x43, length 32
 Session ID: offset 0x64, length 32
 Key share: offset 0xBF, length 65
 
 ```prompt
-幫我在 class Utils 裡面新增一個能夠拿出 random byte[] 的 method
+Help me add a method in class Utils to get random byte[]
 ```
 
 ```
-幫我在 Client 的 connect() 中,
-把 request 的兩段區間代換成 random bytes 之後再送出
+In Client's connect(), 
+replace two sections of the request with random bytes before sending
 "Random": offset (0x43 - 0x38), length 32
 "Session ID": offset (0x64 - 0x38), length 32
 ```
 
 ```
-幫我寫一個 class Keys
-new 出 instance 時就會生出 secp256r1 的 key pair, 存在 public data member 裡
-再提供一個 method, 會 return 65 bytes 的 uncompressed key
+Write a class Keys
+When instantiated, it should generate a secp256r1 key pair, stored in public data members
+Also provide a method that returns 65 bytes of uncompressed key
 ```
 
 ```
-幫我寫一個 Java class Keys
-new 出 instance 時就會生出 secp256r1 的 key pair, 存在 public data member 裡
-再提供一個 method, 會 return 65 bytes 的 uncompressed key
+Write a Java class Keys
+When instantiated, it should generate a secp256r1 key pair, stored in public data members
+Also provide a method that returns 65 bytes of uncompressed key
 
-我希望 bigIntegerToBytes 不接受 negative value
-如果 integer 轉成 bytes 比 length 長, 就丟 runtime exception
+I want bigIntegerToBytes to reject negative values
+If the integer converted to bytes is longer than length, throw a runtime exception
 
-我希望把 method 丟出的 exception 都包裝成 runtime exception
+I want all method exceptions to be wrapped as runtime exceptions
 ```
 
 ```
-把 Client 的 request 的最後的 bytes 用 Keys.getUncompressedPublicKey() 的內容取代再送出
+Replace the final bytes of the Client's request with the content from Keys.getUncompressedPublicKey() before sending
 ```
 
 12:29
-要來真的處理 response 了.
-先手動抽出原本 dump 的 method 到別處.
-
+Time to actually process the response.
+First, manually extract the original dump method elsewhere.
 
 ```
-幫我寫兩個比較 integer 的 method
+Write two integer comparison methods:
 assertEquals(msg, expected, actual)
 assertAtMost(msg, expected, actual)
-失敗則丟出 RuntimeException
+Throw RuntimeException on failure
 ```
 
 ```
-幫我寫一個 class TLSRecord
-從 java.io.DataInput 讀出資料
+Write a class TLSRecord
+Read data from java.io.DataInput
 
-資料的 layout 如下. integer 都是 unsigned, big-endian.
+Data layout as follows. Integers are unsigned, big-endian.
 
 struct {
 ContentType type; // 1 bytes integer
@@ -159,35 +155,34 @@ uint16 length; // 2 bytes integer, should be at most 2^14
 opaque fragment[TLSPlaintext.length]; // "length" bytes 
 } TLSPlaintext;
 
-TLSRecord 有兩個 public field, 不用 getter setter:
+TLSRecord has two public fields, no getter/setter:
 int type; // from "type"
 byte[] data; // from "fragment"
 ```
 
-
 ```
-幫我修改 class TLSRecord
-1. 使用 class Utils 的 assert methods 來檢查
-2. 新增一個 hexdump(title) method, 使用 Utils 的 hexdump. 也要在 title 顯示 type
-3. 不要往外丟 checked exception, 轉成 RuntimeException 再丟
-```
-
-```
-在 class Client 的 connect() 中, 將 DataInputStream 用迴圈讀出多筆 TLSRecord
-每讀一筆 record 就 hexdump 一筆
-如果讀完一筆後, 1 秒內沒有新的 available bytes, 就結束程式
+Modify class TLSRecord
+1. Use the assert methods from class Utils for checks
+2. Add a hexdump(title) method, using Utils' hexdump. Also display type in the title
+3. Don't throw checked exceptions, wrap in RuntimeException
 ```
 
-現在要開始 handle record 的內容了.
-在這邊先偷工減料!
-跳過 handshake 可能會被切成 fragment 的問題!!!!
-也不考慮 coalesce !
+```
+In class Client's connect(), use a loop to read multiple TLSRecord entries from DataInputStream
+Hexdump each record as it's read
+If there are no new available bytes within 1 second after reading a record, end the program
+```
+
+Now I need to start handling the record content.
+I'll take a shortcut here!
+Skipping the problem of handshakes being fragmented!!!!
+Also not considering coalescing!
 
 ```
-幫我寫一個 class Handshake
-從 java.io.DataInput 讀出資料
+Write a class Handshake
+Read data from java.io.DataInput
 
-資料的 layout 如下. integer 都是 unsigned, big-endian.
+Data layout as follows. Integers are unsigned, big-endian.
 
       struct {
           HandshakeType msg_type;    /* handshake type */ // 1 byte
@@ -195,33 +190,33 @@ byte[] data; // from "fragment"
           // "length" bytes
       } Handshake;
 
-讀出成
-class Handshake 有下面幾個 public field, 不用 getter setter
+Read into:
+class Handshake with the following public fields, no getter/setter:
 int msg_type
 int length
 byte[] data
 ```
 
 ```
-新增一個 Handshake 的 read(byte[]) method, 輸入一個 byte[], 內部包裝一個 DataInputStream 以後,  給原來的 read(DataInput) 處理
+Add a Handshake read(byte[]) method, input a byte[], wrap a DataInputStream internally, and pass to the original read(DataInput)
 ```
 
 ```
-在 Handshake 中新增一個 dump(), 顯示每個 fields
+Add a dump() to Handshake, showing each field
 ```
 
 ```
-在 readTLSRecords() 中, 每讀到一個 record, 就判斷是不是 type = 22 (先不要提出 constant)
-如果是, 就用 data 生成 Handshake 並 dump
+In readTLSRecords(), for each record read, check if type = 22 (don't extract constants yet)
+If so, create a Handshake from the data and dump it
 ```
 
-終於來到了 ServerHello
+Finally reaching the ServerHello
 
 ```
-幫我寫一個 class TLSRecord
-從 java.io.DataInput 讀出資料
+Write a class TLSRecord
+Read data from java.io.DataInput
 
-資料的 layout 如下. integer 都是 unsigned, big-endian.
+Data layout as follows. Integers are unsigned, big-endian.
 
       struct {
           ProtocolVersion legacy_version = 0x0303;    // 2 bytes. must be 0x0303.
@@ -232,14 +227,14 @@ byte[] data
           Extension extensions<6..2^16-1>;            // 2 byte length, then byte[length]
       } ServerHello;
       
-讀出成下面的樣子
-class ServerHello 有下面幾個 public field, 不用 getter setter
+Read into:
+class ServerHello with the following public fields, no getter/setter:
 int cipher_suite
 byte[] extension_data
 ```
 
 ```
-幫我建立 Java 的 class Handshake, 通通建立成 int constant, 維持原來的 naming
+Create Java class Handshake, all as int constants, keeping original naming
 enum {
 client_hello(1),
 server_hello(2),
@@ -255,40 +250,39 @@ message_hash(254),
 (255)
 } HandshakeType;
 ```
-上面的 prompt 不小心講錯了. 本來想要建立獨立的 class, 現在變成在 Handshake 裡面的 constant 了. 也行.
+The prompt above was incorrect. I originally wanted to create a separate class, but now they've become constants in Handshake. That's fine too.
 
 ```
-在 class Handshake 的 read() 中, 新增一個 public field 
+In class Handshake's read(), add a public field:
 Object object = null;
-如果 msg_type 是 handshake, 就用 data 把 Handshake object 建出來
+If msg_type is handshake, build the Handshake object using data
 ```
 
 ```
-幫我寫一個 class Extension
-從 java.io.DataInput 讀出資料
+Write a class Extension
+Read data from java.io.DataInput
 
-資料的 layout 如下. integer 都是 unsigned, big-endian.
+Data layout as follows. Integers are unsigned, big-endian.
 struct {
   ExtensionType extension_type;   // 1 byte int
   opaque extension_data<0..2^16-1>; // 2 byte length followed by byte[length]
 } Extension;
 
-
-class Extension 有下面這幾個 public field, 不用 getter setter
+class Extension has the following public fields, no getter/setter:
 int type // from extension_type
 byte[] data // from extension_data
 ```
 
 ```
-在 ServerHello 中, 把 extension_data 用 loop 讀出一個一個的 Extension object, 存到 List<Extension> extensions
+In ServerHello, read extension_data in a loop to extract individual Extension objects, store in List<Extension> extensions
 ```
 
 ```
-讓 git ignore "captures"  目錄
+Make git ignore the "captures" directory
 ```
 
 ```
-把這些加到 class Extension 變成 int constants
+Add these to class Extension as int constants:
 enum {
 server_name(0), /* RFC 6066 */
 max_fragment_length(1), /* RFC 6066 */
@@ -316,113 +310,109 @@ key_share(51), /* RFC 8446 */
 } ExtensionType;
 ```
 
-
-
 ```
-幫我寫一個 class KeyShareEntry
-從 java.io.DataInput 讀出資料
+Write a class KeyShareEntry
+Read data from java.io.DataInput
 
-資料的 layout 如下. integer 都是 unsigned, big-endian.
+Data layout as follows. Integers are unsigned, big-endian.
 struct {
 NamedGroup group; // 2 byte integer
 opaque key_exchange<1..2^16-1>; // 2 byte length, then byte[length]
 } KeyShareEntry;
 
-
-class KeyShareEntry 有下面這幾個 public field, 不用 getter setter
+class KeyShareEntry has these public fields, no getter/setter:
 int group
 byte[] key_exchange
 ```
 
 ```
-在 class Extension 中, 新增一個 public field Object object.
-判斷 type, 如果是 KeyShareEntry, 則從 data 建立 object.
+In class Extension, add a public field Object object.
+Check type, if it's KeyShareEntry, build object from data.
 ```
 
-現在終於層層 parse 出 server key share 了
-需要 ECDHE
+Now I've finally parsed the server key share layer by layer
+Need ECDHE
 
 ```
-我有我的 secp256r1 PrivateKey
-我有對方的 uncompressed public key 的 bytes
-幫我在 Keys class 裡面加一段 code 計算出 shared secret, 存在 Keys 的 field 裡
+I have my secp256r1 PrivateKey
+I have the other party's uncompressed public key bytes
+Add code in Keys class to calculate the shared secret, store in Keys field
 ```
 
 ```
-在 Client.java 中
-1. 把 Keys 提到 Client 的 instance field
-2. 在 readTLSRecords() 中, 判斷如果 handshake 裡面是 server hello, 則讀出 key share extension 來呼叫 Keys 的 computeSharedSecret
+In Client.java
+1. Move Keys to a Client instance field
+2. In readTLSRecords(), check if handshake contains server hello, then read the key share extension to call Keys' computeSharedSecret
 ```
 
-現在困難來了.
+Now the difficult part begins.
 
-前面都有 wireshark 幫忙對答案. 後面這段要走很遠才有得對答案.
+Earlier we had Wireshark to check answers. This next part requires going a long way before we can verify answers.
 
-第一個可以檢核的點應該是用 server_handshake_traffic_secret 解碼 encrypted extensions.
+The first checkpoint should be using server_handshake_traffic_secret to decode encrypted extensions.
 
-如果要縮短路程, 可能是連接 local openssl server 的 key log file.
+To shorten the process, we might connect to a local openssl server's key log file.
 
-整件事情有幾個 input:
+The whole process has several inputs:
 - client DH private key
 - server DH public key
 - ClientHello + ServerHello transcription
-- 實作正確的演算法
-
-
-```
-幫我在 Utils.java 裡面新增一個 write byte[] to String path 的檔案的 method
-throw runtime exception
-另外也加一個從 offset 之後的內容寫入檔案的
-```
+- Correctly implemented algorithm
 
 ```
-幫我寫一個 script 啟動 local openssl server
+Add a method in Utils.java to write byte[] to a file given String path
+Throw runtime exception
+Also add a method to write content from an offset to a file
 ```
 
 ```
-幫我在 capture_openssl.sh 加上選項:
-不加參數就是現在的行為
-加上 "local" argument 的話就啟動 openssl server 在 port 4433, 不需要 socat
+Write a script to start a local openssl server
 ```
 
 ```
-在 class Keys 上面加上一個  private ByteArrayOutputStream transcript
-加上一個 public function addTranscript(byte[]) 去 append
-再加上一個 public function getTranscript(byte[]) 去拿目前的 stream 中的 append 在一起的 byte[]
+Add options to capture_openssl.sh:
+Current behavior if no arguments
+If "local" argument is provided, start openssl server on port 4433, no socat needed
 ```
 
 ```
-幫我在 client hello 送出後, 把 request data 跳過最前面 5 個 byte 之後的所有內容寫入 transcript
+Add a private ByteArrayOutputStream transcript to class Keys
+Add a public function addTranscript(byte[]) to append
+Add a public function getTranscript(byte[]) to get all appended bytes from current stream
 ```
 
 ```
-幫我把來自 server 的 handshake 都寫入 transcript
+After sending the client hello, write all request data excluding the first 5 bytes to transcript
 ```
 
 ```
-幫我依照 RFC 5869 實作 HKDF-Extract 和 HKDF-Expand 到 class HKDF 中
-我只需要 SHA256
-```
-```
-用 RFC 5869 的 Appendix A 中 SHA256 的 test vector 寫一些 test case
+Write all handshakes from the server to transcript
 ```
 
 ```
-我想要用 SHA256 hash
-幫我用 python 的 cryptography 套件寫一個 HKDF 的測試程式
-用 HKDF 的 RFC 的 Appendex 中的 test vector
+Implement HKDF-Extract and HKDF-Expand according to RFC 5869 in class HKDF
+I only need SHA256
+```
+```
+Write some test cases using the SHA256 test vectors from Appendix A of RFC 5869
+```
+
+```
+I want to use SHA256 hash
+Write a test program for HKDF using Python's cryptography package
+Use the test vectors from the HKDF RFC Appendix
 ```
 ```
 source myenv/bin/activate && python test_hkdf.py
 ```
 ```
-看起來 test_hkdf.py 裡面的測試資料是正確的.
-幫我用 Java 實作 HKDF 的 extract 和 expand, 並且用 test_hkdf.py 的測試資料做比對, 寫 Java 的 unit test.
+It looks like the test data in test_hkdf.py is correct.
+Implement HKDF's extract and expand in Java, and compare with test data from test_hkdf.py, write Java unit tests.
 ```
 
 ```
-我想要使用 HKDF.java 實作 TLS 1.3 的 Key Schedule
-幫我依照下面的 spec 實作. 不用考慮 optimization.
+I want to use HKDF.java to implement TLS 1.3 Key Schedule
+Implement according to the spec below. No need to consider optimization.
 
 HKDF-Expand-Label(Secret, Label, Context, Length) =
 HKDF-Expand(Secret, HkdfLabel, Length)
@@ -438,25 +428,24 @@ Transcript-Hash(Messages), Hash.length)
 ```
 
 ```
-幫我在 Keys.java 裡面新增一個 private field byte[] PSK, 不用 getter setter.
-初始值為 hash 長度的 zero bytes
+Add a private field byte[] PSK to Keys.java, no getter/setter.
+Initial value should be hash-length of zero bytes
 ```
 
 ```
-根據 TLS 1.3 的 Key Schedule
-在 Keys.java 中新增一個 function 來計算 client_handshake_traffic_secret
-在收到 server hello 之後,
-在 Client.java 中呼叫這個 function 來印出 client_handshake_traffic_secret
+According to TLS 1.3 Key Schedule
+Add a function in Keys.java to calculate client_handshake_traffic_secret
+After receiving server hello,
+Call this function in Client.java to print client_handshake_traffic_secret
 ```
 
-在和 local openssl server 產出的 ssl_keylog.txt 對答案之後
-現在 b5f93efb454433cf3e9ea99f133cfe1144a202dbccc205d782965ae2fad13b18 是對的了!
-意思是 key 相關的 function 都是對的!
+After comparing with ssl_keylog.txt generated by the local openssl server
+Now b5f93efb454433cf3e9ea99f133cfe1144a202dbccc205d782965ae2fad13b18 is correct!
+This means the key-related functions are all working!
 
 ----
-現在要往下一步走. 因為簡化 fragment, 所以前面第一個 record 就是整個 ServerHello
+Now to move to the next step. Since we've simplified fragments, the first record contains the entire ServerHello.
 
-然後會是一個 optional 的 record: change_cipher_spe (20) (0x14)
+Then there will be an optional record: change_cipher_spec (20) (0x14)
 
-接下來就都是 application_data (23) (0x17) 在最外面當 type 了.
-
+After that, everything will have application_data (23) (0x17) as the outer type.
