@@ -1,0 +1,118 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.0.16 Chrome/132.0.6834.196 Electron/34.2.0 Safari/537.36" version="26.0.16" pages="3">
+  <diagram name="Page-1" id="E9Plg836CFv3mKAXdG7y">
+    <mxGraphModel dx="1026" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="OBWDnMMqOZ1YH1F_P-xA-1" value="&lt;font style=&quot;&quot;&gt;&lt;span style=&quot;text-align: left;&quot;&gt;&lt;font style=&quot;font-size: 64px;&quot;&gt;✅&amp;nbsp;&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;font-size: 64px;&quot;&gt;TruthTLS&lt;/span&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fontSize=32;" vertex="1" parent="1">
+          <mxGeometry width="512" height="512" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="baTzHuemJtgfp7XEwETd" name="Page-2">
+    <mxGraphModel dx="855" dy="619" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ZLuOn48udi2UobVudsyO-1" value="Web Server" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="120" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;strokeColor=#FF0000;strokeWidth=5;" edge="1" parent="1" source="ZLuOn48udi2UobVudsyO-2" target="ZLuOn48udi2UobVudsyO-32">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-2" value="archive.org&lt;div&gt;(notary)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="120" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-4" value="Me" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="200" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="ZLuOn48udi2UobVudsyO-5" target="ZLuOn48udi2UobVudsyO-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-5" value="Alice" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="270" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-6" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#00FF00;strokeWidth=5;" edge="1" parent="1" target="ZLuOn48udi2UobVudsyO-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="280" y="200" as="sourcePoint" />
+            <mxPoint x="330" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-12" value="📄" style="text;whiteSpace=wrap;fontSize=36;" vertex="1" parent="1">
+          <mxGeometry x="175" y="70" width="50" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-10" value="&lt;span style=&quot;font-family: &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;, &amp;quot;Noto Color Emoji&amp;quot;, &amp;quot;Android Emoji&amp;quot;, &amp;quot;EmojiOne Mozilla&amp;quot;, &amp;quot;Twemoji Mozilla&amp;quot;, &amp;quot;Noto Emoji&amp;quot;, &amp;quot;Segoe UI Symbol&amp;quot;, EmojiSymbols, emoji; background-color: rgb(255, 255, 255);&quot;&gt;&lt;font style=&quot;font-size: 36px;&quot;&gt;🔥&lt;/font&gt;&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="150" y="60" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-13" value="📸" style="text;whiteSpace=wrap;fontSize=36;" vertex="1" parent="1">
+          <mxGeometry x="400" y="70" width="50" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-14" value="Public&lt;div&gt;(ephemeral)&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="190" y="40" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-32" value="⛔" style="text;whiteSpace=wrap;fontSize=36;" vertex="1" parent="1">
+          <mxGeometry x="245" y="110" width="50" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-34" value="Web Server" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="120" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-35" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;strokeColor=#00FF00;strokeWidth=5;" edge="1" parent="1" source="ZLuOn48udi2UobVudsyO-36" target="ZLuOn48udi2UobVudsyO-37">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-36" value="archive.org&lt;div&gt;(notary)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="700" y="120" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-37" value="Me" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="200" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-38" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="ZLuOn48udi2UobVudsyO-39" target="ZLuOn48udi2UobVudsyO-36">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-39" value="Alice" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="700" y="270" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-40" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#00FF00;strokeWidth=5;" edge="1" parent="1" target="ZLuOn48udi2UobVudsyO-34">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="620" y="200" as="sourcePoint" />
+            <mxPoint x="670" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-41" value="📄" style="text;whiteSpace=wrap;fontSize=36;" vertex="1" parent="1">
+          <mxGeometry x="515" y="70" width="50" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-42" value="&lt;span style=&quot;font-family: &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;, &amp;quot;Noto Color Emoji&amp;quot;, &amp;quot;Android Emoji&amp;quot;, &amp;quot;EmojiOne Mozilla&amp;quot;, &amp;quot;Twemoji Mozilla&amp;quot;, &amp;quot;Noto Emoji&amp;quot;, &amp;quot;Segoe UI Symbol&amp;quot;, EmojiSymbols, emoji; background-color: rgb(255, 255, 255);&quot;&gt;&lt;font style=&quot;font-size: 36px;&quot;&gt;🔥&lt;/font&gt;&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="490" y="60" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-43" value="📸" style="text;whiteSpace=wrap;fontSize=36;" vertex="1" parent="1">
+          <mxGeometry x="740" y="70" width="50" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-44" value="Public&lt;div&gt;(ephemeral)&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="530" y="40" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ZLuOn48udi2UobVudsyO-46" value="✅" style="text;whiteSpace=wrap;fontSize=36;" vertex="1" parent="1">
+          <mxGeometry x="620" y="150" width="50" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="h-yrW55qAKfevsGv2h-c" name="Page-3">
+    <mxGraphModel dx="1026" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <UserObject label="&lt;pre style=&quot;color: rgb(0, 0, 0); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; overflow-wrap: break-word; white-space: pre-wrap;&quot;&gt;Rescorla                     Standards Track                   [Page 92]&lt;br&gt;&lt;br&gt;RFC 8446                           TLS                       August 2018&lt;br&gt;&lt;br&gt;&lt;br&gt;             0&lt;br&gt;             |&lt;br&gt;             v&lt;br&gt;   PSK -&amp;gt;  HKDF-Extract = Early Secret&lt;br&gt;             |&lt;br&gt;             +-----&amp;gt; Derive-Secret(., &quot;ext binder&quot; | &quot;res binder&quot;, &quot;&quot;)&lt;br&gt;             |                     = binder_key&lt;br&gt;             |&lt;br&gt;             +-----&amp;gt; Derive-Secret(., &quot;c e traffic&quot;, ClientHello)&lt;br&gt;             |                     = client_early_traffic_secret&lt;br&gt;             |&lt;br&gt;             +-----&amp;gt; Derive-Secret(., &quot;e exp master&quot;, ClientHello)&lt;br&gt;             |                     = early_exporter_master_secret&lt;br&gt;             v&lt;br&gt;       Derive-Secret(., &quot;derived&quot;, &quot;&quot;)&lt;br&gt;             |&lt;br&gt;             v&lt;br&gt;   (EC)DHE -&amp;gt; HKDF-Extract = Handshake Secret&lt;br&gt;             |&lt;br&gt;             +-----&amp;gt; Derive-Secret(., &quot;c hs traffic&quot;,&lt;br&gt;             |                     ClientHello...ServerHello)&lt;br&gt;             |                     = &lt;span&gt;client_handshake_traffic_secret&lt;/span&gt;&lt;br&gt;             |&lt;br&gt;             +-----&amp;gt; Derive-Secret(., &quot;s hs traffic&quot;,&lt;br&gt;             |                     ClientHello...ServerHello)&lt;br&gt;             |                     = &lt;span&gt;server_handshake_traffic_secret&lt;/span&gt;&lt;br&gt;             v&lt;br&gt;       Derive-Secret(., &quot;derived&quot;, &quot;&quot;)&lt;br&gt;             |&lt;br&gt;             v&lt;br&gt;   0 -&amp;gt; HKDF-Extract = Master Secret&lt;br&gt;             |&lt;br&gt;             +-----&amp;gt; Derive-Secret(., &quot;c ap traffic&quot;,&lt;br&gt;             |                     ClientHello...server Finished)&lt;br&gt;             |                     = &lt;span style=&quot;background-color: rgb(204, 255, 255);&quot;&gt;client_application_traffic_secret_0&lt;/span&gt;&lt;br&gt;             |&lt;br&gt;             +-----&amp;gt; Derive-Secret(., &quot;s ap traffic&quot;,&lt;br&gt;             |                     ClientHello...server Finished)&lt;br&gt;             |                     = &lt;span style=&quot;background-color: rgb(255, 255, 204);&quot;&gt;server_application_traffic_secret_0&lt;/span&gt;&lt;br&gt;             |&lt;br&gt;             +-----&amp;gt; Derive-Secret(., &quot;exp master&quot;,&lt;br&gt;             |                     ClientHello...server Finished)&lt;br&gt;             |                     = exporter_master_secret&lt;br&gt;             |&lt;br&gt;             +-----&amp;gt; Derive-Secret(., &quot;res master&quot;,&lt;br&gt;                                   ClientHello...client Finished)&lt;br&gt;                                   = resumption_master_secret&lt;/pre&gt;" link="&lt;pre style=&quot;color: rgb(0, 0, 0); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; overflow-wrap: break-word; white-space: pre-wrap;&quot;&gt;Rescorla                     Standards Track                   [Page 92]&#xa;&#xa;RFC 8446                           TLS                       August 2018&#xa;&#xa;&#xa;             0&#xa;             |&#xa;             v&#xa;   PSK -&amp;gt;  HKDF-Extract = Early Secret&#xa;             |&#xa;             +-----&amp;gt; Derive-Secret(., &quot;ext binder&quot; | &quot;res binder&quot;, &quot;&quot;)&#xa;             |                     = binder_key&#xa;             |&#xa;             +-----&amp;gt; Derive-Secret(., &quot;c e traffic&quot;, ClientHello)&#xa;             |                     = client_early_traffic_secret&#xa;             |&#xa;             +-----&amp;gt; Derive-Secret(., &quot;e exp master&quot;, ClientHello)&#xa;             |                     = early_exporter_master_secret&#xa;             v&#xa;       Derive-Secret(., &quot;derived&quot;, &quot;&quot;)&#xa;             |&#xa;             v&#xa;   (EC)DHE -&amp;gt; HKDF-Extract = Handshake Secret&#xa;             |&#xa;             +-----&amp;gt; Derive-Secret(., &quot;c hs traffic&quot;,&#xa;             |                     ClientHello...ServerHello)&#xa;             |                     = client_handshake_traffic_secret&#xa;             |&#xa;             +-----&amp;gt; Derive-Secret(., &quot;s hs traffic&quot;,&#xa;             |                     ClientHello...ServerHello)&#xa;             |                     = server_handshake_traffic_secret&#xa;             v&#xa;       Derive-Secret(., &quot;derived&quot;, &quot;&quot;)&#xa;             |&#xa;             v&#xa;   0 -&amp;gt; HKDF-Extract = Master Secret&#xa;             |&#xa;             +-----&amp;gt; Derive-Secret(., &quot;c ap traffic&quot;,&#xa;             |                     ClientHello...server Finished)&#xa;             |                     = client_application_traffic_secret_0&#xa;             |&#xa;             +-----&amp;gt; Derive-Secret(., &quot;s ap traffic&quot;,&#xa;             |                     ClientHello...server Finished)&#xa;             |                     = server_application_traffic_secret_0&#xa;             |&#xa;             +-----&amp;gt; Derive-Secret(., &quot;exp master&quot;,&#xa;             |                     ClientHello...server Finished)&#xa;             |                     = exporter_master_secret&#xa;             |&#xa;             +-----&amp;gt; Derive-Secret(., &quot;res master&quot;,&#xa;                                   ClientHello...client Finished)&#xa;                                   = resumption_master_secret&lt;/pre&gt;" id="C3yUhLJInZ-Dj9XMH_Pd-2">
+          <mxCell style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+            <mxGeometry x="390" y="940" width="560" height="800" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="MTdZ8s8xCBMTCdQL3_87-1" value="&lt;span&gt;&lt;font style=&quot;&quot; face=&quot;Verdana&quot;&gt;to the Prover&lt;/font&gt;&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#CCFFFF;" vertex="1" parent="1">
+          <mxGeometry x="860" y="1480" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="MTdZ8s8xCBMTCdQL3_87-2" value="to the&lt;br&gt;Verifier" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#FFFFCC;" vertex="1" parent="1">
+          <mxGeometry x="860" y="1600" width="60" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

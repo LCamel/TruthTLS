@@ -2,6 +2,11 @@
 
 我想藉由實作來學習 TLSNotary.
 
+1. 在一些應用中, 要被 verify 的 response 中沒有秘密. 我打算直接 reveal decryption key 給 Verifier. 這樣可以大幅降低 MPC 中的計算, 突破目前 response size 的限制.
+2. 實作 TLSNotary 還沒支援的 TLS 1.3
+3. 提供一個小而容易修改的 code base, 便於實驗和學習.
+
+
 從 FAQ 來看, TLSNotary 目前還沒支援 TLS 1.3 .
 
 另外目前 TLSNotary 的 encryption / decryption 應該是在 MPC 裡面做的. 我想試著改變這一點. 希望能讓計算量降低.
@@ -436,4 +441,22 @@ Transcript-Hash(Messages), Hash.length)
 幫我在 Keys.java 裡面新增一個 private field byte[] PSK, 不用 getter setter.
 初始值為 hash 長度的 zero bytes
 ```
+
+```
+根據 TLS 1.3 的 Key Schedule
+在 Keys.java 中新增一個 function 來計算 client_handshake_traffic_secret
+在收到 server hello 之後,
+在 Client.java 中呼叫這個 function 來印出 client_handshake_traffic_secret
+```
+
+在和 local openssl server 產出的 ssl_keylog.txt 對答案之後
+現在 b5f93efb454433cf3e9ea99f133cfe1144a202dbccc205d782965ae2fad13b18 是對的了!
+意思是 key 相關的 function 都是對的!
+
+----
+現在要往下一步走. 因為簡化 fragment, 所以前面第一個 record 就是整個 ServerHello
+
+然後會是一個 optional 的 record: change_cipher_spe (20) (0x14)
+
+接下來就都是 application_data (23) (0x17) 在最外面當 type 了.
 
